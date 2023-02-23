@@ -3,7 +3,7 @@ interface ILinkedListNode<T> {
   next: ILinkedListNode<T> | null;
 }
 
-class LinkedListNode<T> implements ILinkedListNode<T> {
+export class LinkedListNode<T> implements ILinkedListNode<T> {
   next: ILinkedListNode<T> | null;
   value: T;
 
@@ -13,7 +13,7 @@ class LinkedListNode<T> implements ILinkedListNode<T> {
   }
 }
 
-class LinkedList<T> {
+export class LinkedList<T> {
   root: ILinkedListNode<T> | null;
 
   constructor() {
@@ -45,6 +45,8 @@ class LinkedList<T> {
       const lastNode = this.getLastNode();
       if (lastNode) {
         lastNode.next = new LinkedListNode<T>(value, null);
+      } else {
+        this.root = new LinkedListNode(value, null);
       }
     } else if (nodeByIndex && previousNodeByIndex) {
       previousNodeByIndex.next = new LinkedListNode(value, nodeByIndex);
@@ -119,14 +121,3 @@ class LinkedList<T> {
     return this;
   }
 }
-
-const myLinkedList = new LinkedList<number>();
-
-myLinkedList.addNode(0);
-myLinkedList.addNode(1);
-myLinkedList.addNode(2);
-
-myLinkedList.addNodeByIndex(1.5, 1);
-myLinkedList.addNodeByIndex(494, 103);
-
-myLinkedList.removeNodeByIndex(2);
