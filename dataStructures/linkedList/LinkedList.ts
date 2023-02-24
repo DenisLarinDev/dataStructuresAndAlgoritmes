@@ -15,9 +15,11 @@ export class LinkedListNode<T> implements ILinkedListNode<T> {
 
 export class LinkedList<T> {
   root: ILinkedListNode<T> | null;
+  private tail: ILinkedListNode<T> | null;
 
   constructor() {
     this.root = null;
+    this.tail = null;
   }
 
   public isEmpty() {
@@ -26,14 +28,14 @@ export class LinkedList<T> {
 
   public addNode(value: T) {
     const node = new LinkedListNode<T>(value, null);
-    if (!this.root) this.root = node;
-    else {
-      let current = this.root;
-      while (current.next) {
-        current = current.next;
-      }
-      current.next = node;
+    if (!this.root) {
+      this.root = node;
     }
+    if (this.tail) {
+      this.tail.next = node;
+    }
+
+    this.tail = node;
   }
 
   public addNodeByIndex(value: T, index: number) {
@@ -44,9 +46,13 @@ export class LinkedList<T> {
     } else if (!nodeByIndex) {
       const lastNode = this.getLastNode();
       if (lastNode) {
-        lastNode.next = new LinkedListNode<T>(value, null);
+        const newNode = new LinkedListNode<T>(value, null);
+        lastNode.next = newNode;
+        this.tail = newNode;
       } else {
-        this.root = new LinkedListNode(value, null);
+        const newNode = new LinkedListNode(value, null);
+        this.root = newNode;
+        this.tail = newNode;
       }
     } else if (nodeByIndex && previousNodeByIndex) {
       previousNodeByIndex.next = new LinkedListNode(value, nodeByIndex);
@@ -54,11 +60,7 @@ export class LinkedList<T> {
   }
 
   public getLastNode(): ILinkedListNode<T> | null {
-    let iterator = this.root;
-    while (iterator?.next) {
-      iterator = iterator.next;
-    }
-    return iterator;
+    return this.tail;
   }
 
   public findNodeByIndex(index: number): ILinkedListNode<T> | null {
